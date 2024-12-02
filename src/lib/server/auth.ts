@@ -17,8 +17,8 @@ export function generateSessionToken() {
 export async function createSession(token: string, userId: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session = {
-		_id: new ObjectId(sessionId),
-		userId: new ObjectId(userId),
+		sessionId: sessionId,
+		userId: userId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
 	await sessions.insertOne(session);
@@ -27,7 +27,7 @@ export async function createSession(token: string, userId: string) {
 
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const session = await sessions.findOne({ _id: new ObjectId(sessionId) });
+	const session = await sessions.findOne({ sessionId: sessionId });
 
 	if (!session) {
 		return { session: null, user: null };
@@ -35,12 +35,12 @@ export async function validateSessionToken(token: string) {
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
-		await sessions.deleteOne({ _id: new ObjectId(sessionId) });
+		await sessions.deleteOne({ sessionId: sessionId });
 		return { session: null, user: null };
 	}
 
 	const user = await users.findOne(
-		{ _id: new ObjectId(session.userId) },
+		{ userId: session.userId },
 		{ projection: { _id: 1, username: 1 } }
 	);
 	if (!user) {
@@ -50,10 +50,7 @@ export async function validateSessionToken(token: string) {
 	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
-		await sessions.updateOne(
-			{ _id: new ObjectId(sessionId) },
-			{ $set: { expiresAt: session.expiresAt } }
-		);
+		await sessions.updateOne({ sessionId: sessionId }, { $set: { expiresAt: session.expiresAt } });
 	}
 
 	return { session, user };
