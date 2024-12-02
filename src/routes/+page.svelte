@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
+	import Nav from '$components/Nav.svelte';
 
 	let { data }: { data: PageServerData } = $props();
 </script>
 
-<nav class="nav-bar">
-	<a href="/shows">Shows</a>
-	<a href="/books">Books</a>
-</nav>
+<Nav />
 
 <h1>Current user</h1>
 
@@ -30,12 +28,5 @@
 		padding: 10px 20px;
 		border: none;
 		cursor: pointer;
-	}
-	.nav-bar {
-		display: flex;
-		justify-content: start;
-		gap: 10px;
-		padding: 10px;
-		background-color: #f1f1f1;
 	}
 </style>

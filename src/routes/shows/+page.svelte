@@ -7,9 +7,10 @@
 </script>
 
 <Nav />
-<h1>Books</h1>
 
-<form method="GET" action="/books">
+<h1>Shows</h1>
+
+<form method="GET" action="/shows">
 	<label>
 		Search:
 		<input type="text" name="search" bind:value={initialSearch} />
@@ -18,12 +19,12 @@
 </form>
 
 <div class="articles">
-	{#each data.books as book}
+	{#each data.shows as show}
 		<article>
-			<h2>{book.title}</h2>
-			<p><b>Author:</b> {book.author}</p>
-			<p><b>Price:</b> {book.price}</p>
-			<p><b>Description:</b> {book.description}</p>
+			<h2>{show.title}</h2>
+			<p><b>Year:</b> {show.year}</p>
+			<p><b>Rating:</b> {show.rating}</p>
+			<p><b>Country:</b> {show.country}</p>
 		</article>
 	{/each}
 </div>
