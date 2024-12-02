@@ -17,7 +17,12 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	return {
-		user: { ...userData, _id: userData?._id.toString() }
+		user: { ...userData, _id: userData?._id.toString() } as {
+			_id: string;
+			username: string;
+			userId: number;
+			data: { name: string; email: string; location: string | undefined };
+		}
 	};
 };
 
