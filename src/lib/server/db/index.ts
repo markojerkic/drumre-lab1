@@ -16,3 +16,4 @@ export async function connectDb() {
 export const db = client.db(env.DATABASE_NAME);
 export const sessions = db.collection('sessions');
 export const users = db.collection('users');
+export const books = db.collection('books');
