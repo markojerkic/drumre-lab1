@@ -1,5 +1,6 @@
+import { createUser, getUserFromGitHubId } from '$lib/server/auth';
 import { github } from '$lib/server/github';
-import { generateSessionToken, createSession, setSessionTokenCookie } from '$lib/server/session';
+import { generateSessionToken, createSession, setSessionTokenCookie } from '$lib/server/auth';
 
 import type { RequestEvent } from '@sveltejs/kit';
 import type { OAuth2Tokens } from 'arctic';
@@ -24,6 +25,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		tokens = await github.validateAuthorizationCode(code);
 	} catch (e) {
 		// Invalid code or client credentials
+		console.error(e);
 		return new Response(null, {
 			status: 400
 		});
@@ -42,7 +44,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	if (existingUser) {
 		const sessionToken = generateSessionToken();
-		const session = await createSession(sessionToken, user.id);
+		const session = await createSession(sessionToken, existingUser.userId);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		return new Response(null, {
 			status: 302,
@@ -56,7 +58,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const user = await createUser(githubUserId, githubUsername);
 
 	const sessionToken = generateSessionToken();
-	const session = await createSession(sessionToken, user.id);
+	const session = await createSession(sessionToken, String(user.userId));
 	setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
 	return new Response(null, {
