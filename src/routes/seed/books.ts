@@ -2,10 +2,10 @@ export interface BookSeedResult {
 	status: string;
 	copyright: string;
 	num_results: number;
-	results: Result[];
+	results: Book[];
 }
 
-export interface Result {
+export interface Book {
 	title: string;
 	description?: string;
 	contributor?: string;

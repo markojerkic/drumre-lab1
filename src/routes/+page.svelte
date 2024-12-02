@@ -5,6 +5,11 @@
 	let { data }: { data: PageServerData } = $props();
 </script>
 
+<nav class="nav-bar">
+	<a href="/shows">Shows</a>
+	<a href="/books">Books</a>
+</nav>
+
 <h1>Current user</h1>
 
 <p><b>Username:</b> {data.user.username}</p>
@@ -25,5 +30,12 @@
 		padding: 10px 20px;
 		border: none;
 		cursor: pointer;
+	}
+	.nav-bar {
+		display: flex;
+		justify-content: start;
+		gap: 10px;
+		padding: 10px;
+		background-color: #f1f1f1;
 	}
 </style>
