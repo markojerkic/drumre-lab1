@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import { enhance } from '$app/forms';
 
 	const { data }: { data: PageServerData } = $props();
 	let initialSearch = $state(data.search);
@@ -8,7 +7,7 @@
 
 <h1>Books</h1>
 
-<form method="get" use:enhance>
+<form method="GET" action="/books">
 	<label>
 		Search:
 		<input type="text" name="search" bind:value={initialSearch} />
