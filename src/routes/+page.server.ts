@@ -9,8 +9,12 @@ export const load: PageServerLoad = async (event) => {
 		return redirect(302, '/login');
 	}
 
+	console.log('User is logged in', user);
+
 	return {
-		user
+		user: {
+			username: user.username
+		}
 	};
 };
 
