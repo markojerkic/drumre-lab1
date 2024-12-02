@@ -17,3 +17,4 @@ export const db = client.db(env.DATABASE_NAME);
 export const sessions = db.collection('sessions');
 export const users = db.collection('users');
 export const books = db.collection('books');
+export const shows = db.collection('shows');

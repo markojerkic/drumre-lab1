@@ -1,26 +1,50 @@
 import { json } from '@sveltejs/kit';
-import {
-	NY_TIMES_API_KEY,
-	TRAKT_API_CLIENT_ID,
-	TRAKT_API_CLIENT_SECRET
-} from '$env/static/private';
-import { books } from '$lib/server/db';
+import { NY_TIMES_API_KEY, TRAKT_API_CLIENT_ID } from '$env/static/private';
+import { books, shows } from '$lib/server/db';
+import type { BookSeedResult } from './books';
+import type { ShowsResult } from './shows';
 
 export async function GET(): Promise<Response> {
-	//await seedBooks();
-	await seedShows();
+	const [books, shows] = await Promise.allSettled([seedBooks(), seedShows()]);
+	if (books.status === 'rejected' || shows.status === 'rejected') {
+		return json({ message: 'Error seeding books or shows' }, { status: 500 });
+	}
 
 	return json({ message: 'Books seeded' });
 }
 
 async function seedShows() {
-	const headers = new Headers();
-	headers.append('Content-Type', 'application/json');
-	headers.append('trakt-api-version', '2');
-	headers.append('trakt-api-key', TRAKT_API_CLIENT_ID);
-	const response = await fetch('https://api.trakt.tv/shows/trending');
+	let page = 0;
+	const limit = 100;
 
-	console.log(response.ok, response.status, response.statusText, TRAKT_API_CLIENT_ID);
+	while (page < 100) {
+		console.log('Fetching page', page);
+		const headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		headers.append('trakt-api-version', '2');
+		headers.append('trakt-api-key', TRAKT_API_CLIENT_ID);
+		const response: ShowsResult = await fetch(
+			`https://api.trakt.tv/shows/popular?extended=full&page=${page}&limit=${limit}`,
+			{
+				headers
+			}
+		).then((res) => res.json());
+
+		if (!response.length) {
+			console.log('no shows found', response);
+			break;
+		}
+
+		try {
+			await shows.insertMany(response);
+		} catch (e) {
+			console.log('error savins shows', e);
+		}
+
+		page++;
+	}
+
+	console.log('Done seeding shows');
 }
 
 async function seedBooks() {
@@ -58,50 +82,4 @@ async function seedBooks() {
 		await new Promise((r) => setTimeout(r, 2000));
 		i++;
 	}
-}
-export interface BookSeedResult {
-	status: string;
-	copyright: string;
-	num_results: number;
-	results: Result[];
-}
-
-export interface Result {
-	title: string;
-	description?: string;
-	contributor?: string;
-	author: string;
-	contributor_note?: string;
-	price: string;
-	age_group?: string;
-	publisher?: string;
-	isbns: Isbn[];
-	ranks_history: RanksHistory[];
-	reviews: Review[];
-}
-
-export interface Isbn {
-	isbn10: string;
-	isbn13: string;
-}
-
-export interface RanksHistory {
-	primary_isbn10: string;
-	primary_isbn13: string;
-	rank: number;
-	list_name: string;
-	display_name: string;
-	published_date: string;
-	bestsellers_date: string;
-	weeks_on_list: number;
-	rank_last_week: number;
-	asterisk: number;
-	dagger: number;
-}
-
-export interface Review {
-	book_review_link: string;
-	first_chapter_link?: string;
-	sunday_review_link: string;
-	article_chapter_link?: string;
 }
