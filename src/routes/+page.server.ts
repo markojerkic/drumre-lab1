@@ -1,7 +1,7 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
-import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth';
+import { deleteSessionTokenCookie, getUserByUsername, invalidateSession } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user;
@@ -11,10 +11,13 @@ export const load: PageServerLoad = async (event) => {
 
 	console.log('User is logged in', user);
 
+	const userData = await getUserByUsername(user.username);
+	if (!userData) {
+		return redirect(302, '/login');
+	}
+
 	return {
-		user: {
-			username: user.username
-		}
+		user: { ...userData, _id: userData?._id.toString() }
 	};
 };
 

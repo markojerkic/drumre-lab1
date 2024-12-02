@@ -8,9 +8,11 @@ const client = new MongoClient(env.DATABASE_URL); // Replace with your MongoDB c
 
 export async function connectDb() {
 	console.log('Connecting to database');
+	// set database
+
 	return client.connect();
 }
 
-export const db = client.db();
+export const db = client.db(env.DATABASE_NAME);
 export const sessions = db.collection('sessions');
 export const users = db.collection('users');

@@ -39,6 +39,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const githubUserId = githubUser.id;
 	const githubUsername = githubUser.login;
 
+	console.log('Github User', githubUser);
+
 	const existingUser = await getUserFromGitHubId(githubUserId);
 
 	if (existingUser) {
@@ -56,7 +58,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	}
 
 	console.log('creating user with githubUserId', githubUserId);
-	const user = await createUser(githubUserId, githubUsername);
+	const name = githubUser.name;
+	const email = githubUser.email;
+	const location = githubUser.location;
+
+	const user = await createUser(githubUserId, githubUsername, { name, email, location });
 	console.log('user', user);
 
 	const sessionToken = generateSessionToken();

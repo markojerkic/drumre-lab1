@@ -75,16 +75,27 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
 	});
 }
 
+export async function getUserByUsername(username: string) {
+	return await users.findOne({
+		username
+	});
+}
+
 export async function getUserFromGitHubId(githubId: number) {
 	return await users.findOne({
 		userId: githubId
 	});
 }
 
-export async function createUser(githubId: number, githubUsername: string) {
+export async function createUser(
+	githubId: number,
+	githubUsername: string,
+	data: { name: string; email: string; location: string }
+) {
 	const user = {
 		userId: githubId,
-		username: githubUsername
+		username: githubUsername,
+		data
 	};
 	await users.insertOne(user);
 	return user;
