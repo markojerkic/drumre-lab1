@@ -1,38 +1,33 @@
-# sv
+# Društvene mreže lab 1
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Pokretanje
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+MongoDB baza se pokreće preko `docker-compose` komande:
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+docker compose up
 ```
 
-## Developing
+Ova naredba stvori instancu MongoDB servera na portu 27027 i instancu Mongo Express servera na portu 38081.
+Za pristup Mongo Express serveru koristi se link: [http://localhost:38081/](http://localhost:38081/db/drumre/books),
+a za autentikaciju koristi se korisničko ime `admin` i lozinka `pass`.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Nakon toga se pokreće server:
 
 ```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Aplikacija je dostupna na linku: [http://localhost:5173/](http://localhost:5173/).
 
-To create a production version of your app:
+Za pokretanje uvoza podataka u bazu koristi se:
 
 ```bash
-npm run build
+curl http://localhost:5173/seed
 ```
 
-You can preview the production build with `npm run preview`.
+Ova naredba će preuzeti podatke o TV emisijama s [Trakt-a](https://api.trakt.tv/shows) te o knjigama
+s [NY Times Books API](https://api.nytimes.com/svc/books).
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Za OAuth ser koristi GitHub.

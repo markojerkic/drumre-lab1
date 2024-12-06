@@ -51,7 +51,7 @@ async function seedBooks() {
 	let offset = 0;
 
 	let i = 0;
-	while (i < 1000) {
+	while (i < 10000) {
 		console.log(
 			`https://api.nytimes.com/svc/books/v3/lists/best-sellers/history.json?api-key=${NY_TIMES_API_KEY}&offset=${offset}`
 		);
