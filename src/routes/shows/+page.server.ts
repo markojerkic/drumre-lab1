@@ -1,6 +1,8 @@
 import { shows } from '$lib/server/db';
+import { fail, type Actions } from '@sveltejs/kit';
 import type { Show } from '../seed/shows';
 import type { PageServerLoad } from './$types';
+import { ObjectId } from 'mongodb';
 
 export const load: PageServerLoad = async (event) => {
 	const search = event.url.searchParams.get('search') ?? '';
@@ -28,4 +30,17 @@ export const load: PageServerLoad = async (event) => {
 		hasNext,
 		total: totalForSearch
 	};
+};
+
+export const actions: Actions = {
+	delete: async ({ request }) => {
+		const id = await request.formData().then((data) => data.get('id'));
+		if (!id || typeof id !== 'string') {
+			return fail(400, {
+				message: 'No id provided'
+			});
+		}
+		const objectId = new ObjectId(id);
+		await shows.deleteOne({ _id: objectId });
+	}
 };

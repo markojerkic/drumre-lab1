@@ -1,4 +1,5 @@
 <nav class="nav-bar">
+	<a href="/">Home</a>
 	<a href="/shows">Shows</a>
 	<a href="/books">Books</a>
 </nav>

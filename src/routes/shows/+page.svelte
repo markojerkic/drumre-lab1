@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Nav from '$components/Nav.svelte';
 	import type { PageServerData } from './$types';
 
@@ -39,7 +40,8 @@
 
 {@render nextPage()}
 
-<span class="total">Total books: {data.total}</span>
+<span class="total">Total shows: {data.total}</span>
+<form method="POST" action="?/delete" use:enhance id="delete"></form>
 
 <div class="articles">
 	{#each data.shows as show}
@@ -48,15 +50,24 @@
 			<p><b>Year:</b> {show.year}</p>
 			<p><b>Rating:</b> {show.rating}</p>
 			<p><b>Country:</b> {show.country}</p>
+			<button class="delete" name="id" value={show._id} form="delete">Delete</button>
 		</article>
 	{/each}
 </div>
 {@render nextPage()}
 
 <style>
+	button.delete {
+		background-color: #dc3545;
+		color: white;
+		padding: 10px;
+		margin-top: 10px;
+	}
+
 	span.total {
 		font-size: 1.5em;
 	}
+
 	.paginator {
 		display: flex;
 		justify-content: space-between;
