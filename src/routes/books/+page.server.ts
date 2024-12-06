@@ -19,8 +19,8 @@ export const load: PageServerLoad = async (event) => {
 		title: { $regex: new RegExp(search, 'i') }
 	});
 
+	const hasNext = totalForSearch > cursor + 50;
 	const foundBooks = await foundBooksResult.toArray();
-	const hasNext = await foundBooksResult.hasNext();
 
 	return {
 		books: foundBooks.map(

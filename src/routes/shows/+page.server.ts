@@ -15,11 +15,11 @@ export const load: PageServerLoad = async (event) => {
 		.skip(cursor)
 		.limit(50);
 
-	const hasNext = await foundShowsResult.hasNext();
 	const foundShows = await foundShowsResult.toArray();
 	const totalForSearch = await shows.countDocuments({
 		title: { $regex: new RegExp(search, 'i') }
 	});
+	const hasNext = totalForSearch > cursor + 50;
 
 	return {
 		shows: foundShows
