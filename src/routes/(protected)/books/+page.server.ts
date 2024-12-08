@@ -1,6 +1,6 @@
 import { books } from '$lib/server/db';
 import { fail, type Actions } from '@sveltejs/kit';
-import type { Book } from '../seed/books';
+import type { Book } from '../../seed/books';
 import type { PageServerLoad } from './$types';
 import { ObjectId } from 'mongodb';
 
@@ -34,7 +34,10 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		if (locals.session === null) {
+			return fail(401);
+		}
 		const id = await request.formData().then((data) => data.get('id'));
 		if (!id || typeof id !== 'string') {
 			return fail(400, {
