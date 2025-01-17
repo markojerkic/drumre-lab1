@@ -1,8 +1,8 @@
 import { shows, users } from "$lib/server/db";
 import { fail, type Actions } from "@sveltejs/kit";
-import type { Show } from "../../seed/shows";
 import type { PageServerLoad } from "./$types";
 import { ObjectId } from "mongodb";
+import type { ShowType } from "$lib/types";
 
 export const load: PageServerLoad = async (event) => {
 	const search = event.url.searchParams.get("search") ?? "";
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async (event) => {
 						_id: show._id.toString(),
 
 						isFavourite: userFavourites.includes(show._id.toString()),
-					}) as Show & { _id: string; isFavourite: boolean },
+					}) as ShowType,
 			)
 			.filter((show) => show.title),
 		search,

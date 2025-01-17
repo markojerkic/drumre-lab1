@@ -2,6 +2,8 @@
 	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
 	import Nav from '$components/Nav.svelte';
+	import BookThumbnail from '$components/BookThumbnail.svelte';
+	import ShowThumbnail from '$components/ShowThumbnail.svelte';
 
 	let { data }: { data: PageServerData } = $props();
 </script>
@@ -18,24 +20,44 @@
 		{#if data.user.data.location}
 			<p><b>Location:</b> {data.user.data.location}</p>
 		{/if}
+		<form method="post" use:enhance>
+			<button class="signout-btn">Sign out</button>
+		</form>
+
+		<div>
+			<h2>Prefered genres</h2>
+
+			<ul>
+				{#each data.user.genres as genre}
+					<li>
+						{genre}
+					</li>
+				{/each}
+			</ul>
+
+			<a href="/preferences">Edit preferences</a>
+		</div>
 	</div>
 
 	<div>
-		<h2>Prefered genres</h2>
+		<h2>Favourite books</h2>
 
-		<ul>
-			{#each data.user.genres as genre}
-				<li>
-					{genre}
-				</li>
+		<div class="favourites">
+			{#each data.favouriteBooks as book}
+				<BookThumbnail {book} />
 			{/each}
-		</ul>
+		</div>
+	</div>
+	<div>
+		<h2>Favourite shows</h2>
+
+		<div class="favourites">
+			{#each data.favouriteShows as show}
+				<ShowThumbnail {show} />
+			{/each}
+		</div>
 	</div>
 </div>
-
-<form method="post" use:enhance>
-	<button class="signout-btn">Sign out</button>
-</form>
 
 <style>
 	.signout-btn {
@@ -50,5 +72,11 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 1rem;
+	}
+
+	.favourites {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 20px;
 	}
 </style>

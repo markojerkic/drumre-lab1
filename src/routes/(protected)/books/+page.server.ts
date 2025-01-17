@@ -1,13 +1,9 @@
 import { books, users } from "$lib/server/db";
 import { fail, type Actions } from "@sveltejs/kit";
 import type { BookData } from "../../seed/books";
+import type { BookType } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import { ObjectId } from "mongodb";
-
-type BookType = BookData["volumeInfo"] & {
-	_id: string;
-	isFavourite: boolean;
-};
 
 export const load: PageServerLoad = async (event) => {
 	const search = event.url.searchParams.get("search") ?? "";

@@ -1,4 +1,7 @@
+import type { ObjectId } from "mongodb";
+
 export interface BookData {
+	_id: ObjectId;
 	id: string;
 	volumeInfo: {
 		title: string;

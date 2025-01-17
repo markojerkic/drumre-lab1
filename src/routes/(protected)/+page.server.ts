@@ -6,6 +6,9 @@ import {
 	getUserByUsername,
 	invalidateSession,
 } from "$lib/server/auth";
+import { books, shows } from "$lib/server/db";
+import type { ShowType } from "$lib/types";
+import type { BookData } from "../seed/books";
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user;
@@ -19,20 +22,41 @@ export const load: PageServerLoad = async (event) => {
 	if (!userData) {
 		return redirect(302, "/login");
 	}
-	console.log("User is logged in", userData);
+	console.log("User is logged in");
+
+	const usersFavouriteBooks = await books
+		.find({ _id: { $in: userData.favouriteBooks ?? [] } })
+		.toArray()
+		.then((books) =>
+			(books as unknown as BookData[]).map((book) => ({
+				...book.volumeInfo,
+				_id: book._id.toString(),
+				isFavourite: true,
+			})),
+		);
+
+	const userFavouriteShows = await shows
+		.find({ _id: { $in: userData.favouriteShows ?? [] } })
+		.toArray()
+		.then((shows) =>
+			(shows as unknown as ShowType[]).map((show) => ({
+				...show,
+				_id: show._id.toString(),
+				isFavourite: true,
+			})),
+		);
+
+	const userResponse = {
+		...userData,
+		favouriteBooks: undefined,
+		favouriteShows: undefined,
+		_id: userData?._id.toString(),
+	};
 
 	return {
-		user: { ...userData, _id: userData?._id.toString() } as {
-			_id: string;
-			username: string;
-			userId: number;
-			genres: string[];
-			data: {
-				name: string;
-				email: string;
-				location: string | undefined;
-			};
-		},
+		user: userResponse,
+		favouriteBooks: usersFavouriteBooks,
+		favouriteShows: userFavouriteShows,
 	};
 };
 

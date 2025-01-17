@@ -3,6 +3,7 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding";
 import { db, sessions, users } from "$lib/server/db";
 import { ObjectId } from "mongodb";
+import type { User } from "$lib/types";
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -85,13 +86,10 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
 	});
 }
 
-export async function getUserByUsername(username: string) {
-	return await users.findOne(
-		{
-			username,
-		},
-		{ projection: { favouriteShows: 0, favouriteBooks: 0 } },
-	);
+export async function getUserByUsername(username: string): Promise<User> {
+	return (await users.findOne({
+		username,
+	})) as unknown as Promise<User>;
 }
 
 export async function getUserFromGitHubId(githubId: number) {
