@@ -46,8 +46,12 @@
 	{#each data.books as book}
 		<article>
 			<h2>{book.title}</h2>
-			<p><b>Author:</b> {book.author}</p>
-			<p><b>Price:</b> {book.price}</p>
+			{#if book.imageLinks?.thumbnail}
+				<img src={book.imageLinks.thumbnail} alt={book.title} />
+			{/if}
+			<p><b>Author:</b> {book.authors}</p>
+			<p><b>Genre:</b> {book.categories}</p>
+			<p><b>Pages:</b> {book.pageCount}</p>
 			<p><b>Description:</b> {book.description}</p>
 			<button class="delete" name="id" value={book._id} form="delete">Delete</button>
 		</article>

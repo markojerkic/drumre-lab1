@@ -6,6 +6,7 @@ export interface BookData {
 		description?: string;
 		categories?: string[];
 		averageRating?: number;
+		pageCount?: number;
 		imageLinks?: {
 			thumbnail?: string;
 		};

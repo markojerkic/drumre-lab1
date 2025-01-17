@@ -50,13 +50,12 @@ async function seedShows() {
 }
 
 async function seedBooks() {
-	const maxResults = 40;
+	const maxResults = 1000;
 	const language = "en";
 	const startIndex = 0;
 	const orderBy = "relevance";
 
 	const API_BASE_URL = "https://www.googleapis.com/books/v1/volumes";
-	const books: BookData[] = [];
 	let currentIndex = startIndex;
 	const batchSize = 40; // Google Books API max items per request
 	const searchQuery = "subject:*";
@@ -71,7 +70,7 @@ async function seedBooks() {
 			searchParams.set("startIndex", currentIndex.toString());
 			searchParams.set(
 				"maxResults",
-				Math.min(batchSize, maxResults - books.length).toString(),
+				Math.min(batchSize, maxResults - savedBooks).toString(),
 			);
 			searchParams.set("orderBy", orderBy);
 
@@ -80,7 +79,7 @@ async function seedBooks() {
 			).then((res) => res.json());
 
 			console.log("response", response);
-			const items = response.items || [];
+			const items: BookData[] = response.items || [];
 			if (items.length === 0) break; // No more results
 
 			savedBooks += items.length;
@@ -89,8 +88,13 @@ async function seedBooks() {
 			// Add a small delay to avoid hitting rate limits
 			//await new Promise((resolve) => setTimeout(resolve, 1000));
 			for (const book of items) {
-				console.log("Inserting book", book);
+				console.log(
+					"Inserting book",
+					book.volumeInfo.title,
+					book.volumeInfo.categories,
+				);
 			}
+			books.insertMany(items);
 		}
 	} catch (error) {
 		console.error("Error seeding books", error);
