@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import type { BookData } from "../../../seed/books";
 import type { PageServerLoad } from "./$types";
 import { json } from "@sveltejs/kit";
+import { getSimilarBooks } from "$lib/server/db/bookService";
 
 export const load: PageServerLoad = async (event) => {
 	const user: User = event.locals.user!;
@@ -12,6 +13,8 @@ export const load: PageServerLoad = async (event) => {
 	if (!book) {
 		return json({ error: "Book not found" }, { status: 404 });
 	}
+
+	const similarBooks = getSimilarBooks(book, user._id, 10);
 
 	const usersFavouriteBooks = await users
 		.findOne<User>({ _id: user._id })
@@ -30,5 +33,6 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		book: bookData,
 		isUsersFavourite,
+		similarBooks,
 	};
 };

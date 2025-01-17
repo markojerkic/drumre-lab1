@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import BookThumbnail from '$components/BookThumbnail.svelte';
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
@@ -52,6 +53,17 @@
 	>
 {/if}
 
+{#await data.similarBooks then smilarBooks}
+	{#if smilarBooks}
+		<h2>Similar books</h2>
+		<div class="similar-books">
+			{#each smilarBooks as book}
+				<BookThumbnail {book} />
+			{/each}
+		</div>
+	{/if}
+{/await}
+
 <style>
 	.data-grid {
 		display: grid;
@@ -77,5 +89,11 @@
 		padding: 10px;
 		margin-top: 10px;
 		cursor: pointer;
+	}
+
+	.similar-books {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 20px;
 	}
 </style>
