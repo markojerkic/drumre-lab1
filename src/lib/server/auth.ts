@@ -86,9 +86,12 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
 }
 
 export async function getUserByUsername(username: string) {
-	return await users.findOne({
-		username,
-	});
+	return await users.findOne(
+		{
+			username,
+		},
+		{ projection: { favouriteShows: 0, favouriteBooks: 0 } },
+	);
 }
 
 export async function getUserFromGitHubId(githubId: number) {
