@@ -9,6 +9,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const url = google.createAuthorizationURL(state, codeVerifier, [
 		"openid",
 		"profile",
+		"email", // For email address
 	]);
 
 	event.cookies.set("google_oauth_state", state, {

@@ -8,17 +8,13 @@ connectDb()
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
-	console.log("sessionToken", sessionToken);
 	if (!sessionToken) {
-		console.log("no sessionToken");
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
 	}
 
 	const { session, user } = await auth.validateSessionToken(sessionToken);
-	console.log("session", session);
-	console.log("user", user);
 	if (session) {
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 	} else {

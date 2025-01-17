@@ -45,6 +45,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const claims = decodeIdToken(tokens.idToken()) as GoogleUser;
 	const googleUserId = claims.sub;
 	const username = claims.name;
+	console.log("claims", claims);
 
 	// TODO: Replace this with your own DB query.
 	const existingUser = await getUserFromGoogleId(+googleUserId);
@@ -65,7 +66,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	// TODO: Replace this with your own DB query.
 	const user = await createUser(+googleUserId, username, {
-		email: "",
+		email: claims.email,
 		location: "",
 		name: claims.name,
 	});
