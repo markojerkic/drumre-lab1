@@ -41,6 +41,8 @@
 
 <span class="total">Total books: {data.total}</span>
 <form method="POST" action="?/delete" use:enhance id="delete"></form>
+<form method="POST" action="?/removeFavourite" use:enhance id="remove-favourite"></form>
+<form method="POST" action="?/addFavourite" use:enhance id="add-favourite"></form>
 
 <div class="articles">
 	{#each data.books as book}
@@ -53,6 +55,17 @@
 			<p><b>Genre:</b> {book.categories}</p>
 			<p><b>Pages:</b> {book.pageCount}</p>
 			<p><b>Description:</b> {book.description}</p>
+
+			{#if book.isFavourite}
+				<button class="remove-favourite" name="id" value={book._id} form="remove-favourite"
+					>Remove from favorites</button
+				>
+			{:else}
+				<button class="add-favourite" name="id" value={book._id} form="add-favourite"
+					>Add to favorites</button
+				>
+			{/if}
+
 			<button class="delete" name="id" value={book._id} form="delete">Delete</button>
 		</article>
 	{/each}
@@ -62,6 +75,19 @@
 
 <style>
 	button.delete {
+		background-color: #dc3545;
+		color: white;
+		padding: 10px;
+		margin-top: 10px;
+	}
+
+	button.add-favourite {
+		background-color: #007bff;
+		color: white;
+		padding: 10px;
+		margin-top: 10px;
+	}
+	button.remove-favourite {
 		background-color: #dc3545;
 		color: white;
 		padding: 10px;
