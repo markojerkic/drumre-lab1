@@ -35,12 +35,14 @@
 		color: white;
 		padding: 10px;
 		margin-top: 10px;
+		cursor: pointer;
 	}
 	button.remove-favourite {
 		background-color: #dc3545;
 		color: white;
 		padding: 10px;
 		margin-top: 10px;
+		cursor: pointer;
 	}
 	article {
 		border: 1px solid #ccc;

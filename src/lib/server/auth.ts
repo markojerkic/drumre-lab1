@@ -40,7 +40,7 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const user = await users.findOne(
+	const user = await users.findOne<User>(
 		{ userId: session.userId },
 		{ projection: { _id: 1, username: 1 } },
 	);

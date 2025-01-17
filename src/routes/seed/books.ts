@@ -10,6 +10,10 @@ export interface BookData {
 		categories?: string[];
 		averageRating?: number;
 		pageCount?: number;
+		subtitle?: string;
+		language?: string;
+		publisher?: string;
+		previewLink?: string;
 		imageLinks?: {
 			thumbnail?: string;
 		};
