@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Nav from '$components/Nav.svelte';
 	import ShowThumbnail from '$components/ShowThumbnail.svelte';
 	import type { PageServerData } from './$types';
 
 	const { data }: { data: PageServerData } = $props();
 	let initialSearch = $state(data.search);
 </script>
-
-<Nav />
 
 <h1>Shows</h1>
 

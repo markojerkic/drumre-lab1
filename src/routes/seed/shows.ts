@@ -1,3 +1,5 @@
+import type { ObjectId } from "mongodb";
+
 export type ShowsResult = PopularShow[];
 
 export interface PopularShow {
@@ -6,6 +8,7 @@ export interface PopularShow {
 }
 
 export interface Show {
+	_id: ObjectId;
 	title: string;
 	year: number;
 	ids: Ids;

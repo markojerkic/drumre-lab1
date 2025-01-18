@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import BookThumbnail from '$components/BookThumbnail.svelte';
-	import Nav from '$components/Nav.svelte';
 	import type { PageServerData } from './$types';
 
 	const { data }: { data: PageServerData } = $props();
 	let initialSearch = $state(data.search);
 </script>
 
-<Nav />
 <h1>Books</h1>
 
 {#snippet nextPage()}

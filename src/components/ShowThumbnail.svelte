@@ -10,10 +10,20 @@
 	<form method="POST" action="/shows?/removeFavourite" use:enhance id="remove-favourite"></form>
 	<form method="POST" action="/shows?/addFavourite" use:enhance id="add-favourite"></form>
 
-	<h2>{show.title}</h2>
+	<h2>
+		<a href={`/shows/${show._id}`}>{show.title}</a>
+	</h2>
+	<p>
+		{#if show.tagline}
+			{show.tagline}
+		{:else if show.overview}
+			{show.overview}
+		{/if}
+	</p>
 	<p><b>Year:</b> {show.year}</p>
 	<p><b>Rating:</b> {show.rating}</p>
 	<p><b>Country:</b> {show.country}</p>
+
 	{#if show.isFavourite}
 		<button class="remove-favourite" name="id" value={show._id} form="remove-favourite"
 			>Remove from favorites</button
