@@ -24,3 +24,7 @@ vite.config.ts.timestamp-*
 *.db
 
 .idea/
+
+export.sh
+import.sh
+mongodb_exports/

@@ -113,6 +113,9 @@ export async function createUser(
 		userId: githubId,
 		username: githubUsername,
 		data,
+		genres: [],
+		favouriteShows: [],
+		favouriteBooks: [],
 	};
 	await users.insertOne(user);
 	return user;
