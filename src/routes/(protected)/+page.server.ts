@@ -7,8 +7,10 @@ import {
 	invalidateSession,
 } from "$lib/server/auth";
 import { books, shows } from "$lib/server/db";
-import type { ShowType } from "$lib/types";
 import type { BookData } from "../seed/books";
+import { type Show } from "../seed/shows";
+import { getShowRecomedations } from "$lib/server/db/showService";
+import { getBookRecomedations } from "$lib/server/db/bookService";
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user;
@@ -16,16 +18,16 @@ export const load: PageServerLoad = async (event) => {
 		return redirect(302, "/login");
 	}
 
-	console.log("User is logged in", user);
-
 	const userData = await getUserByUsername(user.username);
 	if (!userData) {
 		return redirect(302, "/login");
 	}
-	console.log("User is logged in");
+
+	const recomendedShows = getShowRecomedations(userData.genres, user._id);
+	const recomendedBooks = getBookRecomedations(userData.genres, user._id);
 
 	const usersFavouriteBooks = await books
-		.find({ _id: { $in: userData.favouriteBooks ?? [] } })
+		.find<BookData>({ _id: { $in: userData.favouriteBooks ?? [] } })
 		.toArray()
 		.then((books) =>
 			(books as unknown as BookData[]).map((book) => ({
@@ -36,10 +38,10 @@ export const load: PageServerLoad = async (event) => {
 		);
 
 	const userFavouriteShows = await shows
-		.find({ _id: { $in: userData.favouriteShows ?? [] } })
+		.find<Show>({ _id: { $in: userData.favouriteShows ?? [] } })
 		.toArray()
 		.then((shows) =>
-			(shows as unknown as ShowType[]).map((show) => ({
+			shows.map((show) => ({
 				...show,
 				_id: show._id.toString(),
 				isFavourite: true,
@@ -57,6 +59,8 @@ export const load: PageServerLoad = async (event) => {
 		user: userResponse,
 		favouriteBooks: usersFavouriteBooks,
 		favouriteShows: userFavouriteShows,
+		recomendedShows,
+		recomendedBooks,
 	};
 };
 

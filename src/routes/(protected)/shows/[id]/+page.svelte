@@ -4,7 +4,7 @@
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
-	let show = data.show!;
+	let show = $derived(data.show!);
 </script>
 
 <svelte:head>

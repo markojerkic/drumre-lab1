@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
-	import Nav from '$components/Nav.svelte';
 	import BookThumbnail from '$components/BookThumbnail.svelte';
 	import ShowThumbnail from '$components/ShowThumbnail.svelte';
 
 	let { data }: { data: PageServerData } = $props();
 </script>
-
-<Nav />
 
 <div class="layout">
 	<div>
@@ -57,6 +54,30 @@
 			{/each}
 		</div>
 	</div>
+
+	{#await data.recomendedBooks then books}
+		<div>
+			<h2>Recomended books</h2>
+
+			<div class="favourites">
+				{#each books as book}
+					<BookThumbnail {book} />
+				{/each}
+			</div>
+		</div>
+	{/await}
+
+	{#await data.recomendedShows then shows}
+		<div>
+			<h2>Recomended shows</h2>
+
+			<div class="favourites">
+				{#each shows as show}
+					<ShowThumbnail {show} />
+				{/each}
+			</div>
+		</div>
+	{/await}
 </div>
 
 <style>

@@ -37,3 +37,34 @@ export const getSimilarBooks = async (
 
 	return similarBooks;
 };
+
+export const getBookRecomedations = async (
+	genres: string[],
+	userId: ObjectId,
+	maxResults = 5,
+): Promise<BookType[]> => {
+	const userFavourites = await users
+		.findOne<User>({ _id: userId })
+		.then((user) => user?.favouriteBooks ?? []);
+
+	const recommendations = await books
+		.find<BookData>({
+			"volumeInfo.categories": {
+				$in: genres.map((genre) => new RegExp("^" + genre + "$", "i")),
+			},
+
+			_id: { $nin: userFavourites },
+		})
+		.limit(maxResults)
+		.toArray()
+		.then((books) =>
+			books.map((book) => ({
+				...book.volumeInfo,
+				_id: book._id.toString(),
+				isFavourite: userFavourites.includes(book._id),
+			})),
+		);
+	console.log("recommendations", recommendations);
+
+	return recommendations;
+};

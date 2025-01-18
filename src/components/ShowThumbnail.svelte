@@ -7,8 +7,13 @@
 </script>
 
 <article>
-	<form method="POST" action="/shows?/removeFavourite" use:enhance id="remove-favourite"></form>
-	<form method="POST" action="/shows?/addFavourite" use:enhance id="add-favourite"></form>
+	<form
+		method="POST"
+		action="/shows?/removeFavourite"
+		use:enhance
+		id="show-remove-favourite"
+	></form>
+	<form method="POST" action="/shows?/addFavourite" use:enhance id="show-add-favourite"></form>
 
 	<h2>
 		<a href={`/shows/${show._id}`}>{show.title}</a>
@@ -25,11 +30,11 @@
 	<p><b>Country:</b> {show.country}</p>
 
 	{#if show.isFavourite}
-		<button class="remove-favourite" name="id" value={show._id} form="remove-favourite"
+		<button class="remove-favourite" name="id" value={show._id} form="show-remove-favourite"
 			>Remove from favorites</button
 		>
 	{:else}
-		<button class="add-favourite" name="id" value={show._id} form="add-favourite"
+		<button class="add-favourite" name="id" value={show._id} form="show-add-favourite"
 			>Add to favorites</button
 		>
 	{/if}

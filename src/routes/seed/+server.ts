@@ -1,16 +1,14 @@
 import { json } from "@sveltejs/kit";
-import { NY_TIMES_API_KEY, TRAKT_API_CLIENT_ID } from "$env/static/private";
+import { TRAKT_API_CLIENT_ID } from "$env/static/private";
 import { books, shows } from "$lib/server/db";
-import type { ShowsResult } from "./shows";
+import type { ShowsResult, Show } from "./shows";
 import type { BookData } from "./books";
 
 export async function GET(): Promise<Response> {
-	await seedBooks();
-
-	//const [books, shows] = await Promise.allSettled([seedBooks(), seedShows()]);
-	//if (books.status === "rejected" || shows.status === "rejected") {
-	//	return json({ message: "Error seeding books or shows" }, { status: 500 });
-	//}
+	const [books, shows] = await Promise.allSettled([seedBooks(), seedShows()]);
+	if (books.status === "rejected" || shows.status === "rejected") {
+		return json({ message: "Error seeding books or shows" }, { status: 500 });
+	}
 
 	return json({ message: "Books seeded" });
 }
@@ -25,7 +23,7 @@ async function seedShows() {
 		headers.append("Content-Type", "application/json");
 		headers.append("trakt-api-version", "2");
 		headers.append("trakt-api-key", TRAKT_API_CLIENT_ID);
-		const response: ShowsResult = await fetch(
+		const response: Show[] = await fetch(
 			`https://api.trakt.tv/shows/popular?extended=full&page=${page}&limit=${limit}`,
 			{
 				headers,

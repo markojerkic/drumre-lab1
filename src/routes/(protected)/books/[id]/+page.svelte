@@ -4,7 +4,7 @@
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
-	let book = data.book!;
+	let book = $derived(data.book!);
 </script>
 
 <svelte:head>
