@@ -3,7 +3,7 @@
 	import type { ShowType } from '$lib/types';
 	import type { Snippet } from 'svelte';
 
-	let { show, children }: { show: ShowType; children?: Snippet } = $props();
+	let { show, children, showDeleteButton }: { show: ShowType; children?: Snippet; showDeleteButton?: boolean } = $props();
 </script>
 
 <article>

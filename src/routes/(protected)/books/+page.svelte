@@ -45,8 +45,7 @@
 
 <div class="articles">
 	{#each data.books as book}
-		<BookThumbnail {book}>
-			<button class="delete" name="id" value={book._id} form="delete">Delete</button>
+		<BookThumbnail {book} showDeleteButton={true}>
 		</BookThumbnail>
 	{/each}
 </div>

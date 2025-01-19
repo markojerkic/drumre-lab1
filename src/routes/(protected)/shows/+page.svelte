@@ -45,8 +45,7 @@
 
 <div class="articles">
 	{#each data.shows as show}
-		<ShowThumbnail {show}>
-			<button class="delete" name="id" value={show._id} form="delete">Delete</button>
+		<ShowThumbnail {show} showDeleteButton={true}>
 		</ShowThumbnail>
 	{/each}
 </div>
