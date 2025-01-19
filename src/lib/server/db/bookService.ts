@@ -16,13 +16,15 @@ export const getSimilarBooks = async (
 
 	const userFavourites = await users
 		.findOne<User>({ _id: userId })
-		.then((user) => user?.favouriteBooks ?? []);
+		.then((user) => user?.favouriteBooks?.map((fav) => fav.toString()) ?? []);
 
 	console.log("Finding similar books", genre, book._id, userFavourites);
 
 	const similarBooks = await books
 		.find<BookData>({
-			"volumeInfo.categories": { $in: genre },
+			"volumeInfo.categories": {
+				$in: genre.map((genre) => new RegExp("^" + genre + "$", "i")),
+			},
 			_id: { $ne: book._id },
 		})
 		.limit(maxResults)
@@ -31,7 +33,7 @@ export const getSimilarBooks = async (
 			books.map((book) => ({
 				...book.volumeInfo,
 				_id: book._id.toString(),
-				isFavourite: userFavourites.includes(book._id),
+				isFavourite: userFavourites.includes(book._id.toString()),
 			})),
 		);
 

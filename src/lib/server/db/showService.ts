@@ -16,7 +16,7 @@ export const getSimilarShows = async (
 
 	const userFavourites = await users
 		.findOne<User>({ _id: userId })
-		.then((user) => user?.favouriteShows ?? []);
+		.then((user) => user?.favouriteShows?.map((fav) => fav.toString()) ?? []);
 
 	console.log("Finding similar books", genre, show._id, userFavourites);
 
@@ -31,7 +31,7 @@ export const getSimilarShows = async (
 			shows.map((show) => ({
 				...show,
 				_id: show._id.toString(),
-				isFavourite: userFavourites.includes(show._id),
+				isFavourite: userFavourites.includes(show._id.toString()),
 			})),
 		);
 
