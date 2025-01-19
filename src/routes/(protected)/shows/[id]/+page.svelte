@@ -16,9 +16,15 @@
 <form method="post" action="/shows?/addFavourite" use:enhance id="add-favourite"></form>
 
 <article class="show-details">
-	{#if data.show?.imageLinks?.thumbnail}
-		<img class="thumbnail" src={data.show!.imageLinks.thumbnail} alt={data.show!.title} />
-	{:else if data.show!.trailerLink}
+	{#if data.show?.poster}
+		<img class="thumbnail" src={data.show?.poster} alt={data.show!.title} />
+	{/if}
+	<div>
+		<p>{data.show!.overview}</p>
+	</div>
+</article>
+{#if data.show!.trailerLink}
+	<div class="trailer">
 		<iframe
 			width="560"
 			height="315"
@@ -28,11 +34,8 @@
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
 		></iframe>
-	{/if}
-	<div>
-		<p>{data.show!.overview}</p>
 	</div>
-</article>
+{/if}
 
 {#if data.show!.imageLinks?.thumbnail && data.show!.trailerLink}
 	<div class="trailer-card">
@@ -95,6 +98,12 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		margin-bottom: 20px;
 		margin-top: 20px;
+	}
+
+	.trailer {
+		display: flex;
+		justify-content: center;
+		padding: 1rem;
 	}
 
 	.show-details {

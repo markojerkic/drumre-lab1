@@ -31,6 +31,7 @@ export interface Show {
 	language: string;
 	languages: string[];
 	available_translations: string[];
+	poster?: string;
 	imageLinks?: {
 		thumbnail: string;
 	};

@@ -12,9 +12,15 @@
 
 <article>
 	<div class="show-container">
-		<h2>
-			<a href={`/shows/${show._id}`}>{show.title}</a>
-		</h2>
+		{#if show.poster}
+			<a href={`/shows/${show._id}`}>
+				<img src={show.poster} alt={show.title} class="show-thumbnail" />
+			</a>
+		{:else}
+			<h2>
+				<a href={`/shows/${show._id}`}>{show.title}</a>
+			</h2>
+		{/if}
 
 		<div class="show-info">
 			<p>{show.genres.join(', ')}</p>
@@ -68,6 +74,14 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+	}
+	/* IMAGE */
+	img.show-thumbnail {
+		width: 100%;
+		height: auto;
+		display: block;
+		border: 1px solid var(--border-color);
+		border-radius: 10px;
 	}
 
 	.buttons.single-button {
