@@ -1,5 +1,5 @@
 import { json } from "@sveltejs/kit";
-import { TMDB_API_KEY, TRAKT_API_CLIENT_ID } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { books, shows } from "$lib/server/db";
 import type { Show } from "./shows";
 import type { BookData } from "./books";
@@ -22,7 +22,7 @@ async function seedShows() {
 		const headers = new Headers();
 		headers.append("Content-Type", "application/json");
 		headers.append("trakt-api-version", "2");
-		headers.append("trakt-api-key", TRAKT_API_CLIENT_ID);
+		headers.append("trakt-api-key", env.TRAKT_API_CLIENT_ID);
 		const response: Show[] = await fetch(
 			`https://api.trakt.tv/shows/popular?extended=full&page=${page}&limit=${limit}`,
 			{
@@ -38,7 +38,7 @@ async function seedShows() {
 		const posterFetchers = response.map(async (show) => {
 			// Fetch poster from TMDB
 			const tmdbResponse = await fetch(
-				`https://api.themoviedb.org/3/tv/${show.ids.tmdb}?api_key=${TMDB_API_KEY}`,
+				`https://api.themoviedb.org/3/tv/${show.ids.tmdb}?api_key=${env.TMDB_API_KEY}`,
 			).then((res) => res.json());
 			if (tmdbResponse.poster_path) {
 				console.log("Found TMDB data", tmdbResponse.poster_path);
