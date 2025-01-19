@@ -9,52 +9,82 @@
 	<title>User preferences</title>
 </svelte:head>
 
-<h1>User preferences</h1>
-
-<h2>Select prefered genres</h2>
+<div class="header-container">
+	<h2 class="title">Select preferred genres</h2>
+</div>
 
 <form use:enhance method="post">
 	<div class="genres-options">
 		{#each data.genres as genre}
-			<span>
-				<label>
-					<input
-						type="checkbox"
-						name="genres"
-						value={genre}
-						checked={data.userGenres.includes(genre)}
-					/>
-					{genre}
-				</label>
-			</span>
+   <span>
+    <label>
+     <input
+			 type="checkbox"
+			 name="genres"
+			 value={genre}
+			 checked={data.userGenres.includes(genre)}
+		 />
+			{genre}
+    </label>
+   </span>
 		{/each}
 	</div>
-
-	<button class="submit-search" type="submit">Save</button>
+	<div class="button-container">
+		<button class="submit-search" type="submit">Save</button>
+	</div>
 </form>
 
 <style>
-	.genres-options {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-		gap: 1rem;
-	}
-	.genres-options span {
-		display: inline-flex;
-	}
-	.genres-options input {
-		margin-right: 0.25rem;
-	}
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-	.genres-options label {
-		cursor: pointer;
-	}
+    .genres-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        max-width: 100%;
+    }
 
-	button.submit-search {
-		background-color: #4caf50;
-		color: white;
-		padding: 10px 20px;
-		border: none;
-		cursor: pointer;
-	}
+    .genres-options span {
+        display: flex;
+        align-items: center;
+        background-color: var(--background-color);
+        padding: 0.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .genres-options input {
+        margin-right: 0.5rem;
+        accent-color: var(--primary-color);
+    }
+
+    .genres-options label {
+        cursor: pointer;
+        color: var(--text-color);
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    button.submit-search {
+        background-color: var(--primary-color);
+        color: var(--text-button-color);
+        height: 40px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        padding: 0 1rem;
+    }
+
+    button.submit-search:hover {
+        filter: brightness(0.9);
+    }
 </style>
