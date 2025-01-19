@@ -19,20 +19,17 @@ export const load: PageServerLoad = async (event) => {
 	const usersFavouriteBooks = await users
 		.findOne<User>({ _id: user._id })
 		.then((user) => user?.favouriteBooks ?? [])
-		.then((favourites: ObjectId[]) =>
-			favourites.map((favourite) => favourite.toString()),
-		);
-	const isUsersFavourite =
-		usersFavouriteBooks?.includes(book._id.toString()) ?? false;
+		.then((favourites: ObjectId[]) => favourites.map((favourite) => favourite.toString()));
+	const isUsersFavourite = usersFavouriteBooks?.includes(book._id.toString()) ?? false;
 
 	const bookData = {
 		...book.volumeInfo,
-		_id: book._id.toString(),
+		_id: book._id.toString()
 	};
 
 	return {
 		book: bookData,
 		isUsersFavourite,
-		similarBooks,
+		similarBooks
 	};
 };

@@ -1,14 +1,14 @@
-import { createUser, getUserFromGitHubId } from '$lib/server/auth';
-import { github } from '$lib/server/github';
-import { generateSessionToken, createSession, setSessionTokenCookie } from '$lib/server/auth';
+import { createUser, getUserFromGitHubId } from "$lib/server/auth";
+import { github } from "$lib/server/github";
+import { generateSessionToken, createSession, setSessionTokenCookie } from "$lib/server/auth";
 
-import type { RequestEvent } from '@sveltejs/kit';
-import type { OAuth2Tokens } from 'arctic';
+import type { RequestEvent } from "@sveltejs/kit";
+import type { OAuth2Tokens } from "arctic";
 
 export async function GET(event: RequestEvent): Promise<Response> {
-	const code = event.url.searchParams.get('code');
-	const state = event.url.searchParams.get('state');
-	const storedState = event.cookies.get('github_oauth_state') ?? null;
+	const code = event.url.searchParams.get("code");
+	const state = event.url.searchParams.get("state");
+	const storedState = event.cookies.get("github_oauth_state") ?? null;
 	if (code === null || state === null || storedState === null) {
 		return new Response(null, {
 			status: 400
@@ -30,7 +30,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 400
 		});
 	}
-	const githubUserResponse = await fetch('https://api.github.com/user', {
+	const githubUserResponse = await fetch("https://api.github.com/user", {
 		headers: {
 			Authorization: `Bearer ${tokens.accessToken()}`
 		}
@@ -39,31 +39,31 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const githubUserId = githubUser.id;
 	const githubUsername = githubUser.login;
 
-	console.log('Github User', githubUser);
+	console.log("Github User", githubUser);
 
 	const existingUser = await getUserFromGitHubId(githubUserId);
 
 	if (existingUser) {
 		const sessionToken = generateSessionToken();
-		console.log('sessionToken', sessionToken);
+		console.log("sessionToken", sessionToken);
 		const session = await createSession(sessionToken, existingUser.userId);
-		console.log('session', session);
+		console.log("session", session);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/'
+				Location: "/"
 			}
 		});
 	}
 
-	console.log('creating user with githubUserId', githubUserId);
+	console.log("creating user with githubUserId", githubUserId);
 	const name = githubUser.name;
 	const email = githubUser.email;
 	const location = githubUser.location;
 
 	const user = await createUser(githubUserId, githubUsername, { name, email, location });
-	console.log('user', user);
+	console.log("user", user);
 
 	const sessionToken = generateSessionToken();
 	const session = await createSession(sessionToken, String(user.userId));
@@ -72,7 +72,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: '/'
+			Location: "/"
 		}
 	});
 }

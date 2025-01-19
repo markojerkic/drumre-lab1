@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { BookType } from '$lib/types';
-	import type { Snippet } from 'svelte';
+	import { enhance } from "$app/forms";
+	import type { BookType } from "$lib/types";
+	import type { Snippet } from "svelte";
 
 	let {
 		book,
@@ -14,7 +14,7 @@
 	<div class="book-container">
 		<a href={`/books/${book._id}`}>
 			<img
-				src={book.imageLinks?.thumbnail || '/book-cover-placeholder.jpg'}
+				src={book.imageLinks?.thumbnail || "/book-cover-placeholder.jpg"}
 				alt={book.title}
 				class="book-thumbnail"
 			/>
@@ -125,4 +125,3 @@
 		filter: brightness(0.8);
 	}
 </style>
-

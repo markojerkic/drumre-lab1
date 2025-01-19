@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { PageServerData } from './$types';
-	import BookThumbnail from '$components/BookThumbnail.svelte';
-	import ShowThumbnail from '$components/ShowThumbnail.svelte';
+	import { enhance } from "$app/forms";
+	import type { PageServerData } from "./$types";
+	import BookThumbnail from "$components/BookThumbnail.svelte";
+	import ShowThumbnail from "$components/ShowThumbnail.svelte";
 
 	let { data }: { data: PageServerData } = $props();
 </script>
 
 <div class="layout">
-
-
 	<div class="user-data">
 		<div class="user-info">
 			<h2>Current user</h2>
@@ -83,74 +81,76 @@
 </div>
 
 <style>
+	h1,
+	h2,
+	p {
+		color: var(--text-color);
+	}
 
-		h1, h2, p {
-				color: var(--text-color);
-		}
+	.genre-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+		gap: 10px;
+		margin-bottom: 20px;
+	}
 
-    .genre-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 10px;
-				margin-bottom: 20px;
-    }
+	.genre-grid span {
+		background-color: var(--background-color);
+		color: var(--text-color);
+		padding: 10px;
+		border-radius: 5px;
+		text-align: center;
+		word-break: break-word;
+		overflow-wrap: break-word;
+		filter: brightness(0.9);
+	}
 
-    .genre-grid span {
-        background-color: var(--background-color);
-        color: var(--text-color);
-        padding: 10px;
-        border-radius: 5px;
-        text-align: center;
-        word-break: break-word;
-        overflow-wrap: break-word;
-				filter: brightness(0.9);
-    }
+	.edit-preferences-btn {
+		background-color: var(--primary-color);
+		color: var(--text-button-color);
+		padding: 10px 20px;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+	}
 
-    .edit-preferences-btn {
-        background-color: var(--primary-color);
-        color: var(--text-button-color);
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-    }
+	.edit-preferences-btn:hover {
+		filter: brightness(0.9);
+	}
 
-    .edit-preferences-btn:hover {
-        filter: brightness(0.9);
-    }
+	.user-data {
+		display: flex;
+		justify-content: space-between;
+		background-color: var(--background-color);
+		padding: 1rem;
+		border-radius: 10px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		margin-bottom: 20px;
+		grid-column: 1 / -1;
+		margin-top: 1rem;
+	}
 
-    .user-data {
-        display: flex;
-        justify-content: space-between;
-        background-color: var(--background-color);
-        padding: 1rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        grid-column: 1 / -1;
-        margin-top: 1rem;
-    }
+	.user-info {
+		flex: 1;
+		margin-right: 1rem;
+	}
 
-    .user-info {
-        flex: 1;
-        margin-right: 1rem;
-    }
+	.user-genres {
+		flex: 1;
+	}
 
-    .user-genres {
-        flex: 1;
-    }
-
-	.signout-btn { /* Maybe set button color to red */
-      background-color: var(--danger-color);
-			color: var(--text-button-color);
-			padding: 10px 20px;
-			border: none;
-			cursor: pointer;
-			border-radius: 10px;
-  }
+	.signout-btn {
+		/* Maybe set button color to red */
+		background-color: var(--danger-color);
+		color: var(--text-button-color);
+		padding: 10px 20px;
+		border: none;
+		cursor: pointer;
+		border-radius: 10px;
+	}
 
 	.signout-btn:hover {
-      filter: brightness(0.9);
+		filter: brightness(0.9);
 	}
 
 	.layout {

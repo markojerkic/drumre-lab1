@@ -6,7 +6,7 @@ import type { Show } from "../../../routes/seed/shows";
 export const getSimilarShows = async (
 	show: Show,
 	userId: ObjectId,
-	maxResults = 5,
+	maxResults = 5
 ): Promise<ShowType[]> => {
 	const genre = show.genres;
 
@@ -23,7 +23,7 @@ export const getSimilarShows = async (
 	const similarShows = await shows
 		.find<Show>({
 			genres: { $in: genre },
-			_id: { $ne: show._id },
+			_id: { $ne: show._id }
 		})
 		.limit(maxResults)
 		.toArray()
@@ -31,8 +31,8 @@ export const getSimilarShows = async (
 			shows.map((show) => ({
 				...show,
 				_id: show._id.toString(),
-				isFavourite: userFavourites.includes(show._id.toString()),
-			})),
+				isFavourite: userFavourites.includes(show._id.toString())
+			}))
 		);
 
 	return similarShows as ShowType[];
@@ -41,7 +41,7 @@ export const getSimilarShows = async (
 export const getShowRecomedations = async (
 	genres: string[],
 	userId: ObjectId,
-	maxResults = 5,
+	maxResults = 5
 ): Promise<ShowType[]> => {
 	const userFavourites = await users
 		.findOne<User>({ _id: userId })
@@ -50,10 +50,10 @@ export const getShowRecomedations = async (
 	const recommendations = await shows
 		.find<Show>({
 			genres: {
-				$in: genres.map((genre) => new RegExp("^" + genre + "$", "i")),
+				$in: genres.map((genre) => new RegExp("^" + genre + "$", "i"))
 			},
 
-			_id: { $nin: userFavourites },
+			_id: { $nin: userFavourites }
 		})
 		.limit(maxResults)
 		.toArray()
@@ -61,8 +61,8 @@ export const getShowRecomedations = async (
 			shows.map((show) => ({
 				...show,
 				_id: show._id.toString(),
-				isFavourite: userFavourites.includes(show._id),
-			})),
+				isFavourite: userFavourites.includes(show._id)
+			}))
 		);
 
 	return recommendations as ShowType[];

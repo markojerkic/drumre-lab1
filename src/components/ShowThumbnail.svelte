@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { ShowType } from '$lib/types';
-	import type { Snippet } from 'svelte';
+	import { enhance } from "$app/forms";
+	import type { ShowType } from "$lib/types";
+	import type { Snippet } from "svelte";
 
 	let {
 		show,
@@ -23,7 +23,7 @@
 		{/if}
 
 		<div class="show-info">
-			<p>{show.genres.join(', ')}</p>
+			<p>{show.genres.join(", ")}</p>
 		</div>
 
 		<p>{show.rating.toFixed(2)} / 10</p>

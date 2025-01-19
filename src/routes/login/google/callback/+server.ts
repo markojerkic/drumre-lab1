@@ -3,7 +3,7 @@ import {
 	createSession,
 	setSessionTokenCookie,
 	getUserFromGoogleId,
-	createUser,
+	createUser
 } from "$lib/server/auth";
 import { google, type GoogleUser } from "$lib/server/google";
 import { decodeIdToken } from "arctic";
@@ -16,19 +16,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const state = event.url.searchParams.get("state");
 	const storedState = event.cookies.get("google_oauth_state") ?? null;
 	const codeVerifier = event.cookies.get("google_code_verifier") ?? null;
-	if (
-		code === null ||
-		state === null ||
-		storedState === null ||
-		codeVerifier === null
-	) {
+	if (code === null || state === null || storedState === null || codeVerifier === null) {
 		return new Response(null, {
-			status: 400,
+			status: 400
 		});
 	}
 	if (state !== storedState) {
 		return new Response(null, {
-			status: 400,
+			status: 400
 		});
 	}
 
@@ -39,7 +34,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		console.error("Error validationg auth code", e);
 		// Invalid code or client credentials
 		return new Response(null, {
-			status: 400,
+			status: 400
 		});
 	}
 	const claims = decodeIdToken(tokens.idToken()) as GoogleUser;
@@ -59,8 +54,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: "/",
-			},
+				Location: "/"
+			}
 		});
 	}
 
@@ -68,7 +63,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const user = await createUser(+googleUserId, username, {
 		email: claims.email,
 		location: "",
-		name: claims.name,
+		name: claims.name
 	});
 
 	console.log("created user", user);
@@ -80,7 +75,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: "/",
-		},
+			Location: "/"
+		}
 	});
 }

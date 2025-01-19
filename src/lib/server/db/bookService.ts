@@ -6,7 +6,7 @@ import type { BookData } from "../../../routes/seed/books";
 export const getSimilarBooks = async (
 	book: BookData,
 	userId: ObjectId,
-	maxResults = 5,
+	maxResults = 5
 ): Promise<BookType[]> => {
 	const genre = book.volumeInfo.categories;
 
@@ -23,9 +23,9 @@ export const getSimilarBooks = async (
 	const similarBooks = await books
 		.find<BookData>({
 			"volumeInfo.categories": {
-				$in: genre.map((genre) => new RegExp("^" + genre + "$", "i")),
+				$in: genre.map((genre) => new RegExp("^" + genre + "$", "i"))
 			},
-			_id: { $ne: book._id },
+			_id: { $ne: book._id }
 		})
 		.limit(maxResults)
 		.toArray()
@@ -33,8 +33,8 @@ export const getSimilarBooks = async (
 			books.map((book) => ({
 				...book.volumeInfo,
 				_id: book._id.toString(),
-				isFavourite: userFavourites.includes(book._id.toString()),
-			})),
+				isFavourite: userFavourites.includes(book._id.toString())
+			}))
 		);
 
 	return similarBooks;
@@ -43,7 +43,7 @@ export const getSimilarBooks = async (
 export const getBookRecomedations = async (
 	genres: string[],
 	userId: ObjectId,
-	maxResults = 5,
+	maxResults = 5
 ): Promise<BookType[]> => {
 	const userFavourites = await users
 		.findOne<User>({ _id: userId })
@@ -52,10 +52,10 @@ export const getBookRecomedations = async (
 	const recommendations = await books
 		.find<BookData>({
 			"volumeInfo.categories": {
-				$in: genres.map((genre) => new RegExp("^" + genre + "$", "i")),
+				$in: genres.map((genre) => new RegExp("^" + genre + "$", "i"))
 			},
 
-			_id: { $nin: userFavourites },
+			_id: { $nin: userFavourites }
 		})
 		.limit(maxResults)
 		.toArray()
@@ -63,8 +63,8 @@ export const getBookRecomedations = async (
 			books.map((book) => ({
 				...book.volumeInfo,
 				_id: book._id.toString(),
-				isFavourite: userFavourites.includes(book._id),
-			})),
+				isFavourite: userFavourites.includes(book._id)
+			}))
 		);
 	console.log("recommendations", recommendations);
 

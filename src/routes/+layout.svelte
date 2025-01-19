@@ -1,6 +1,6 @@
 <script>
-	import Nav from '$components/Nav.svelte';
-	import '/src/app.css';
+	import Nav from "$components/Nav.svelte";
+	import "/src/app.css";
 	let { children } = $props();
 </script>
 

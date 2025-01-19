@@ -1,5 +1,5 @@
 import { json } from "@sveltejs/kit";
-import { TMDB_API_KEY, TRAKT_API_CLIENT_ID } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { books, shows } from "$lib/server/db";
 import type { Show } from "./shows";
 import type { BookData } from "./books";
@@ -22,12 +22,12 @@ async function seedShows() {
 		const headers = new Headers();
 		headers.append("Content-Type", "application/json");
 		headers.append("trakt-api-version", "2");
-		headers.append("trakt-api-key", TRAKT_API_CLIENT_ID);
+		headers.append("trakt-api-key", env.TRAKT_API_CLIENT_ID);
 		const response: Show[] = await fetch(
 			`https://api.trakt.tv/shows/popular?extended=full&page=${page}&limit=${limit}`,
 			{
-				headers,
-			},
+				headers
+			}
 		).then((res) => res.json());
 
 		if (!response.length) {
@@ -38,7 +38,7 @@ async function seedShows() {
 		const posterFetchers = response.map(async (show) => {
 			// Fetch poster from TMDB
 			const tmdbResponse = await fetch(
-				`https://api.themoviedb.org/3/tv/${show.ids.tmdb}?api_key=${TMDB_API_KEY}`,
+				`https://api.themoviedb.org/3/tv/${show.ids.tmdb}?api_key=${env.TMDB_API_KEY}`
 			).then((res) => res.json());
 			if (tmdbResponse.poster_path) {
 				console.log("Found TMDB data", tmdbResponse.poster_path);
@@ -80,15 +80,12 @@ async function seedBooks() {
 			searchParams.set("q", searchQuery);
 			searchParams.set("langRestrict", language);
 			searchParams.set("startIndex", currentIndex.toString());
-			searchParams.set(
-				"maxResults",
-				Math.min(batchSize, maxResults - savedBooks).toString(),
-			);
+			searchParams.set("maxResults", Math.min(batchSize, maxResults - savedBooks).toString());
 			searchParams.set("orderBy", orderBy);
 
-			const response = await fetch(
-				`${API_BASE_URL}?${searchParams.toString()}`,
-			).then((res) => res.json());
+			const response = await fetch(`${API_BASE_URL}?${searchParams.toString()}`).then((res) =>
+				res.json()
+			);
 
 			console.log("response", response);
 			const items: BookData[] = response.items || [];
@@ -100,11 +97,7 @@ async function seedBooks() {
 			// Add a small delay to avoid hitting rate limits
 			//await new Promise((resolve) => setTimeout(resolve, 1000));
 			for (const book of items) {
-				console.log(
-					"Inserting book",
-					book.volumeInfo.title,
-					book.volumeInfo.categories,
-				);
+				console.log("Inserting book", book.volumeInfo.title, book.volumeInfo.categories);
 			}
 			books.insertMany(items);
 		}

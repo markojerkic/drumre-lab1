@@ -1,5 +1,5 @@
 import { Google } from "arctic";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 export type GoogleUser = {
 	id: number;
@@ -17,7 +17,7 @@ export type GoogleUser = {
 };
 
 export const google = new Google(
-	GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET,
-	"http://localhost:5173/login/google/callback",
+	env.GOOGLE_CLIENT_ID,
+	env.GOOGLE_CLIENT_SECRET,
+	"http://localhost:5173/login/google/callback"
 );
