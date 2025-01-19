@@ -20,7 +20,7 @@ export async function createSession(token: string, userId: string) {
 	const session = {
 		sessionId: sessionId,
 		userId: userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30),
+		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
 	await sessions.insertOne(session);
 	return session;
@@ -42,72 +42,62 @@ export async function validateSessionToken(token: string) {
 
 	const user = await users.findOne<User>(
 		{ userId: session.userId },
-		{ projection: { _id: 1, username: 1 } },
+		{ projection: { _id: 1, username: 1 } }
 	);
 	if (!user) {
 		return { session: null, user: null };
 	}
 
-	const renewSession =
-		Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
-		await sessions.updateOne(
-			{ sessionId: sessionId },
-			{ $set: { expiresAt: session.expiresAt } },
-		);
+		await sessions.updateOne({ sessionId: sessionId }, { $set: { expiresAt: session.expiresAt } });
 	}
 
 	return { session, user };
 }
 
-export type SessionValidationResult = Awaited<
-	ReturnType<typeof validateSessionToken>
->;
+export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(sessionId: string) {
 	await sessions.deleteOne({ _id: new ObjectId(sessionId) });
 }
 
-export function setSessionTokenCookie(
-	event: RequestEvent,
-	token: string,
-	expiresAt: Date,
-) {
+export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
 	event.cookies.set(sessionCookieName, token, {
 		expires: expiresAt,
-		path: "/",
+		path: "/"
 	});
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent) {
 	event.cookies.delete(sessionCookieName, {
-		path: "/",
+		path: "/"
 	});
 }
 
 export async function getUserByUsername(username: string): Promise<User> {
 	return (await users.findOne({
-		username,
+		username
 	})) as unknown as Promise<User>;
 }
 
 export async function getUserFromGitHubId(githubId: number) {
 	return await users.findOne({
-		userId: githubId,
+		userId: githubId
 	});
 }
 
 export async function getUserFromGoogleId(githubId: number) {
 	return await users.findOne({
-		userId: githubId,
+		userId: githubId
 	});
 }
 
 export async function createUser(
 	githubId: number,
 	githubUsername: string,
-	data: { name: string; email: string; location: string },
+	data: { name: string; email: string; location: string }
 ) {
 	const user = {
 		userId: githubId,
@@ -115,7 +105,7 @@ export async function createUser(
 		data,
 		genres: [],
 		favouriteShows: [],
-		favouriteBooks: [],
+		favouriteBooks: []
 	};
 	await users.insertOne(user);
 	return user;

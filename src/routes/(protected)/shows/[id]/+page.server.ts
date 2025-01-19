@@ -19,22 +19,19 @@ export const load: PageServerLoad = async (event) => {
 	const usersFavouriteShows = await users
 		.findOne<User>({ _id: user._id })
 		.then((user) => user?.favouriteShows ?? [])
-		.then((favourites: ObjectId[]) =>
-			favourites.map((favourite) => favourite.toString()),
-		);
-	const isUsersFavourite =
-		usersFavouriteShows?.includes(show._id.toString()) ?? false;
+		.then((favourites: ObjectId[]) => favourites.map((favourite) => favourite.toString()));
+	const isUsersFavourite = usersFavouriteShows?.includes(show._id.toString()) ?? false;
 
 	const showData = {
 		...show,
 		trailerLink: getTrailerLink(show),
-		_id: show._id.toString(),
+		_id: show._id.toString()
 	};
 
 	return {
 		show: showData,
 		isUsersFavourite,
-		similarShows,
+		similarShows
 	};
 };
 

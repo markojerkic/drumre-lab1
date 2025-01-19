@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import BookThumbnail from '$components/BookThumbnail.svelte';
-	import type { PageServerData } from './$types';
+	import { enhance } from "$app/forms";
+	import BookThumbnail from "$components/BookThumbnail.svelte";
+	import type { PageServerData } from "./$types";
 
 	let { data }: { data: PageServerData } = $props();
 	let book = $derived(data.book!);
@@ -15,7 +15,7 @@
 	<div>
 		<img
 			class="thumbnail"
-			src={book.imageLinks?.thumbnail || '/book-cover-placeholder.jpg'}
+			src={book.imageLinks?.thumbnail || "/book-cover-placeholder.jpg"}
 			alt={book.title}
 		/>
 	</div>
@@ -139,4 +139,3 @@
 		gap: 20px;
 	}
 </style>
-

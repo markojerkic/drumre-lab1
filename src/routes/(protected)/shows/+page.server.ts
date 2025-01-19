@@ -11,20 +11,18 @@ export const load: PageServerLoad = async (event) => {
 	const userFavourites = await users
 		.findOne({ _id: event.locals.user!._id })
 		.then((user) => user?.favouriteShows ?? [])
-		.then((favourites: ObjectId[]) =>
-			favourites.map((favourite) => favourite.toString()),
-		);
+		.then((favourites: ObjectId[]) => favourites.map((favourite) => favourite.toString()));
 
 	const foundShowsResult = shows
 		.find({
-			title: { $regex: new RegExp(search, "i") },
+			title: { $regex: new RegExp(search, "i") }
 		})
 		.skip(cursor)
 		.limit(50);
 
 	const foundShows = await foundShowsResult.toArray();
 	const totalForSearch = await shows.countDocuments({
-		title: { $regex: new RegExp(search, "i") },
+		title: { $regex: new RegExp(search, "i") }
 	});
 	const hasNext = totalForSearch > cursor + 50;
 
@@ -36,14 +34,14 @@ export const load: PageServerLoad = async (event) => {
 						...show,
 						_id: show._id.toString(),
 
-						isFavourite: userFavourites.includes(show._id.toString()),
-					}) as ShowType,
+						isFavourite: userFavourites.includes(show._id.toString())
+					}) as ShowType
 			)
 			.filter((show) => show.title),
 		search,
 		cursor: cursor + foundShows.length,
 		hasNext,
-		total: totalForSearch,
+		total: totalForSearch
 	};
 };
 
@@ -55,7 +53,7 @@ export const actions: Actions = {
 		const id = await request.formData().then((data) => data.get("id"));
 		if (!id || typeof id !== "string") {
 			return fail(400, {
-				message: "No id provided",
+				message: "No id provided"
 			});
 		}
 		const objectId = new ObjectId(id);
@@ -68,15 +66,12 @@ export const actions: Actions = {
 		const id = await request.formData().then((data) => data.get("id"));
 		if (!id || typeof id !== "string") {
 			return fail(400, {
-				message: "No id provided",
+				message: "No id provided"
 			});
 		}
 		const objectId = new ObjectId(id);
 		const user = locals.user!;
-		users.updateOne(
-			{ _id: user._id },
-			{ $addToSet: { favouriteShows: objectId } },
-		);
+		users.updateOne({ _id: user._id }, { $addToSet: { favouriteShows: objectId } });
 	},
 	removeFavourite: async ({ request, locals }) => {
 		if (locals.session === null) {
@@ -85,11 +80,11 @@ export const actions: Actions = {
 		const id = await request.formData().then((data) => data.get("id"));
 		if (!id || typeof id !== "string") {
 			return fail(400, {
-				message: "No id provided",
+				message: "No id provided"
 			});
 		}
 		const objectId = new ObjectId(id);
 		const user = locals.user!;
 		users.updateOne({ _id: user._id }, { $pull: { favouriteShows: objectId } });
-	},
+	}
 };
