@@ -21,6 +21,7 @@ export interface Show {
 	network: string;
 	country: string;
 	trailer?: string;
+	trailerLink?: string;
 	homepage: string;
 	status: string;
 	rating: number;
@@ -30,6 +31,10 @@ export interface Show {
 	language: string;
 	languages: string[];
 	available_translations: string[];
+	poster?: string;
+	imageLinks?: {
+		thumbnail: string;
+	};
 	genres: string[];
 	aired_episodes: number;
 }

@@ -16,14 +16,14 @@ export const load: PageServerLoad = async (event) => {
 
 	const similarShows = getSimilarShows(show, user._id, 10);
 
-	const usersFavouriteshows = await users
+	const usersFavouriteShows = await users
 		.findOne<User>({ _id: user._id })
 		.then((user) => user?.favouriteShows ?? [])
 		.then((favourites: ObjectId[]) =>
 			favourites.map((favourite) => favourite.toString()),
 		);
 	const isUsersFavourite =
-		usersFavouriteshows?.includes(show._id.toString()) ?? false;
+		usersFavouriteShows?.includes(show._id.toString()) ?? false;
 
 	const showData = {
 		...show,

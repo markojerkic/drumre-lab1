@@ -1,0 +1,15 @@
+body {
+    background-color: light-dark(#FAFAFA, #151515);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    --primary-color: #3584e4;
+    --danger-color: #e01b24;
+    --background-color: light-dark(#F2F2F2, #1E1E1E);
+    --border-color: light-dark(#393939, #9a9996);
+    --text-color: light-dark(#000000, #ffffff);
+    --text-button-color: #ffffff;
+}
+
+:root {
+    color-scheme: light dark;
+}

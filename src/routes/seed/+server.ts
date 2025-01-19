@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
-import { TRAKT_API_CLIENT_ID } from "$env/static/private";
+import { TMDB_API_KEY, TRAKT_API_CLIENT_ID } from "$env/static/private";
 import { books, shows } from "$lib/server/db";
-import type { ShowsResult, Show } from "./shows";
+import type { Show } from "./shows";
 import type { BookData } from "./books";
 
 export async function GET(): Promise<Response> {
@@ -34,6 +34,20 @@ async function seedShows() {
 			console.log("no shows found", response);
 			break;
 		}
+
+		const posterFetchers = response.map(async (show) => {
+			// Fetch poster from TMDB
+			const tmdbResponse = await fetch(
+				`https://api.themoviedb.org/3/tv/${show.ids.tmdb}?api_key=${TMDB_API_KEY}`,
+			).then((res) => res.json());
+			if (tmdbResponse.poster_path) {
+				console.log("Found TMDB data", tmdbResponse.poster_path);
+				show.poster = `https://image.tmdb.org/t/p/w500${tmdbResponse.poster_path}`;
+			}
+		});
+
+		await Promise.allSettled(posterFetchers);
+		console.log("Done with page");
 
 		try {
 			await shows.insertMany(response);
