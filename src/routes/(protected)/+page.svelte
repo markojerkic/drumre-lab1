@@ -59,7 +59,7 @@
 
 	{#await data.recomendedBooks then books}
 		<div>
-			<h2>Recomended books</h2>
+			<h2>Recommended books</h2>
 
 			<div class="favourites">
 				{#each books as book}
@@ -71,7 +71,7 @@
 
 	{#await data.recomendedShows then shows}
 		<div>
-			<h2>Recomended shows</h2>
+			<h2>Recommended shows</h2>
 
 			<div class="favourites">
 				{#each shows as show}
